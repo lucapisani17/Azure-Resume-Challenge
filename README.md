@@ -245,3 +245,4 @@ Questo progetto è open source e disponibile sotto la [MIT License](LICENSE).
 ---
 
 ⭐️ Se questo progetto ti è stato utile, lascia una stella!x
+
