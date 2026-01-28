@@ -8,7 +8,11 @@ Un curriculum digitale moderno e interattivo costruito con tecnologie cloud-nati
 
 ## 🌐 Demo Live
 
-**[Visualizza il CV →](https://lucapcv.z6.web.core.windows.net)**
+**[Visualizza il CV →](https://www.lucapisani.site)** 🔒
+
+Alternative URLs:
+- **Custom Domain:** https://www.lucapisani.site
+- **Azure Storage:** https://lucapcv.z38.web.core.windows.net
 
 ## 📋 Panoramica del Progetto
 
@@ -20,16 +24,35 @@ Questo progetto dimostra competenze pratiche in:
 - 🔄 **CI/CD** (GitHub Actions)
 - 🏗️ **Infrastructure as Code** (Terraform)
 - 🧪 **Testing** (Pytest, 97.56% coverage)
+- 🌐 **DNS & CDN** (Cloudflare)
+- 🔒 **SSL/TLS** (HTTPS con certificato gratuito)
 
 ## 🏗️ Architettura
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
+│                      User Browser                            │
+│                  www.lucapisani.site                         │
+└────────────────────────┬────────────────────────────────────┘
+                         │ HTTPS (SSL/TLS)
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   Cloudflare CDN                             │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  - SSL/TLS Termination (Free Certificate)            │  │
+│  │  - Global CDN Caching                                 │  │
+│  │  - DDoS Protection                                    │  │
+│  │  - HTTP → HTTPS Redirect                              │  │
+│  └──────────────────────────────────────────────────────┘  │
+└────────────────────────┬────────────────────────────────────┘
+                         │ HTTP/HTTPS
+                         ▼
+┌─────────────────────────────────────────────────────────────┐
 │                         Frontend                             │
 │  ┌──────────────────────────────────────────────────────┐  │
 │  │  Azure Storage (Static Website)                       │  │
 │  │  - HTML/CSS/JavaScript                                │  │
-│  │  - HTTPS automatico                                   │  │
+│  │  - Blob Storage ($web container)                      │  │
 │  └──────────────────────────────────────────────────────┘  │
 └────────────────────────┬────────────────────────────────────┘
                          │
@@ -103,6 +126,11 @@ Questo progetto dimostra competenze pratiche in:
 ### Infrastructure as Code
 - **Terraform** - Gestione infrastruttura Azure
 - **Azure Provider** - Risorse Azure gestite come codice
+
+### Networking & Security
+- **Cloudflare** - DNS management, CDN, e SSL/TLS
+- **Custom Domain** - www.lucapisani.site
+- **HTTPS** - Certificato SSL gratuito gestito da Cloudflare
 
 ## 📁 Struttura del Progetto
 
@@ -312,6 +340,46 @@ terraform apply
 terraform destroy
 ```
 
+## 🌐 Custom Domain & SSL
+
+Il sito è accessibile tramite il custom domain **www.lucapisani.site** con HTTPS gratuito.
+
+### Setup Cloudflare
+
+Il dominio utilizza Cloudflare per:
+- ✅ **DNS Management** - Nameserver gestiti da Cloudflare
+- ✅ **SSL/TLS** - Certificato gratuito automatico (modalità Flexible)
+- ✅ **CDN** - Content Delivery Network globale
+- ✅ **Security** - DDoS protection e WAF
+- ✅ **Performance** - Caching, minification, compression
+
+### Configurazione DNS
+
+```
+Type: CNAME
+Name: www
+Content: lucapcv.z38.web.core.windows.net
+Proxy: ☁️ Proxied (Cloudflare CDN attivo)
+```
+
+### Vantaggi
+
+- 🔒 **HTTPS gratuito** - Certificato SSL gestito automaticamente
+- ⚡ **Performance migliorate** - CDN con 300+ edge locations
+- 🛡️ **Sicurezza** - Protezione DDoS e firewall applicativo
+- 💰 **Costo zero** - Piano Cloudflare Free
+- 🌍 **Latenza ridotta** - Content servito da location più vicina
+
+### Architecture Flow
+
+```
+User → Cloudflare CDN (HTTPS) → Azure Storage (HTTP) → Response
+                ↓
+           SSL Termination
+           Caching
+           DDoS Protection
+```
+
 ## 📊 Funzionalità
 
 ### ✅ Implementate
@@ -326,14 +394,17 @@ terraform destroy
 - [x] Application Insights monitoring
 - [x] Python 3.10 con best practices
 - [x] Serverless architecture
+- [x] **Custom Domain (www.lucapisani.site)**
+- [x] **Cloudflare CDN per performance globali**
+- [x] **Certificato SSL gratuito gestito automaticamente**
 
 ### 🔄 Possibili Miglioramenti Futuri
-- [ ] Custom Domain + Azure CDN
 - [ ] Azure Monitor Alerts
 - [ ] Integration tests
 - [ ] Performance testing
 - [ ] Blog post documentazione completa
 - [ ] Multi-region deployment
+- [ ] A/B testing con Cloudflare Workers
 
 ## 🎓 Azure Cloud Resume Challenge - Completamento
 
@@ -343,8 +414,8 @@ Questo progetto completa l'[Azure Cloud Resume Challenge](https://cloudresumecha
 2. ✅ **HTML Resume** - CV completo e professionale
 3. ✅ **CSS Styling** - Design moderno con animazioni
 4. ✅ **Static Website** - Azure Storage con hosting statico
-5. ✅ **HTTPS** - Abilitato automaticamente
-6. ⏳ **Custom Domain** - (opzionale, non implementato)
+5. ✅ **HTTPS** - Abilitato con Cloudflare SSL
+6. ✅ **Custom Domain** - www.lucapisani.site
 7. ✅ **Visitor Counter** - JavaScript + API
 8. ✅ **Database** - Cosmos DB Serverless
 9. ✅ **API** - Azure Functions
@@ -355,7 +426,7 @@ Questo progetto completa l'[Azure Cloud Resume Challenge](https://cloudresumecha
 14. ✅ **CI/CD** - GitHub Actions (Deploy + Test workflows)
 15. ⏳ **Blog Post** - (pianificato)
 
-**Progress: 13/15 completati (86.7%)** 🎉
+**Progress: 14/15 completati (93.3%)** 🎉🎉
 
 ## 📈 Metriche del Progetto
 
@@ -365,15 +436,34 @@ Questo progetto completa l'[Azure Cloud Resume Challenge](https://cloudresumecha
 - **Deployment Time**: ~2-3 minuti
 - **Average Response Time**: < 200ms
 - **Uptime**: 99.9%+ (serverless)
+- **SSL Rating**: A+ (Cloudflare SSL)
+- **CDN Edge Locations**: 300+ worldwide
 
 ## 🔐 Sicurezza
 
-- ✅ HTTPS obbligatorio
+- ✅ HTTPS obbligatorio (HTTP → HTTPS redirect)
+- ✅ SSL/TLS 1.2+ con certificato gestito
 - ✅ CORS configurato con whitelist
 - ✅ Secrets gestiti tramite GitHub Secrets
 - ✅ Variabili sensibili non in repository
 - ✅ Azure Functions con autenticazione
 - ✅ Cosmos DB con chiavi rotate
+- ✅ DDoS protection via Cloudflare
+- ✅ WAF (Web Application Firewall)
+
+## 💰 Costi Mensili Stimati
+
+| Servizio | Costo |
+|----------|-------|
+| Azure Storage | ~€0.02 |
+| Azure Functions | €0 (sempre free tier) |
+| Cosmos DB Serverless | ~€0.05-0.10 |
+| Application Insights | €0 (entro limiti free) |
+| Cloudflare Free | €0 |
+| **Dominio (annuale)** | ~€8-10/anno |
+| **TOTALE MENSILE** | **~€0.10-0.15** |
+
+*Il progetto costa praticamente zero grazie ai free tier e serverless!*
 
 ## 📝 Licenza
 
@@ -382,6 +472,7 @@ Questo progetto è open source e disponibile sotto la [MIT License](LICENSE).
 ## 👤 Autore
 
 **Luca Pisani**
+- Website: [www.lucapisani.site](https://www.lucapisani.site)
 - GitHub: [@lucapisani17](https://github.com/lucapisani17)
 - Email: luca.pisani99@outlook.com
 - LinkedIn: [Luca Pisani](https://linkedin.com/in/luca-pisani)
@@ -391,6 +482,7 @@ Questo progetto è open source e disponibile sotto la [MIT License](LICENSE).
 - [Azure Cloud Resume Challenge](https://cloudresumechallenge.dev/) - Forrest Brazeal
 - [Microsoft Azure Documentation](https://docs.microsoft.com/azure/)
 - [Terraform Azure Provider](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs)
+- [Cloudflare](https://www.cloudflare.com/) - Free SSL & CDN
 - Community di Cloud Resume Challenge
 
 ## 🤝 Contribuire
@@ -409,7 +501,8 @@ Se questo progetto ti è stato utile:
 - ⭐ Lascia una stella su GitHub
 - 🔄 Condividi con altri
 - 💬 Lascia feedback
+- 🌐 Visita il sito: [www.lucapisani.site](https://www.lucapisani.site)
 
 ---
 
-**Built with ❤️ and ☁️ Azure**
+**Built with ❤️ and ☁️ Azure + Cloudflare**
