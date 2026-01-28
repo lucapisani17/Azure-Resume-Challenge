@@ -234,6 +234,83 @@
             font-weight: bold;
         }
 
+        /* Visitor Counter */
+        .visitor-counter {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visitor-counter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+        }
+
+        .visitor-counter-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .visitor-counter h3 {
+            color: var(--primary);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .visitor-count {
+            font-size: 3rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            animation: countPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes countPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .visitor-label {
+            color: rgba(226, 232, 240, 0.7);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Section */
         section {
             margin-bottom: 4rem;
@@ -542,6 +619,10 @@
                 top: 1rem;
                 right: 1rem;
             }
+
+            .visitor-count {
+                font-size: 2.5rem;
+            }
         }
 
         /* Scroll animations */
@@ -588,6 +669,17 @@
                         <div class="contact-item">📱 (+39) 340 097 9774</div>
                         <div class="contact-item">✉️ luca.pisani99@outlook.com</div>
                         <div class="contact-item">🎂 17/03/1999</div>
+                        
+                        <!-- Visitor Counter -->
+                        <div class="visitor-counter">
+                            <div class="visitor-counter-content">
+                                <h3>Contatore Visite</h3>
+                                <div id="counter-it" class="visitor-count">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                                <div class="visitor-label">visualizzazioni totali</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -876,6 +968,17 @@
                         <div class="contact-item">📱 (+39) 340 097 9774</div>
                         <div class="contact-item">✉️ luca.pisani99@outlook.com</div>
                         <div class="contact-item">🎂 March 17, 1999</div>
+                        
+                        <!-- Visitor Counter -->
+                        <div class="visitor-counter">
+                            <div class="visitor-counter-content">
+                                <h3>Visitor Counter</h3>
+                                <div id="counter-en" class="visitor-count">
+                                    <div class="loading-spinner"></div>
+                                </div>
+                                <div class="visitor-label">total views</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -1147,6 +1250,35 @@
     </div>
 
     <script>
+        // Azure Function URL
+        const functionApiUrl = 'https://resume-rg-counter-gsfxd6g8g0fwguf0.westeurope-01.azurewebsites.net/api/getvisitorcount';
+
+        // Load visitor count when page loads
+        window.addEventListener('DOMContentLoaded', (event) => {
+            getVisitCount();
+        });
+
+        function getVisitCount() {
+            fetch(functionApiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Visitor count:', data.count);
+                    // Update both IT and EN counters
+                    document.getElementById('counter-it').textContent = data.count;
+                    document.getElementById('counter-en').textContent = data.count;
+                })
+                .catch(error => {
+                    console.error('Error fetching visitor count:', error);
+                    document.getElementById('counter-it').textContent = 'N/A';
+                    document.getElementById('counter-en').textContent = 'N/A';
+                });
+        }
+
         function switchLanguage(lang) {
             // Hide all language content
             document.querySelectorAll('.lang-content').forEach(content => {

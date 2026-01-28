@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.pyc
+
+# Azure Functions
+local.settings.json
+.python_packages/
+bin/
+obj/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Secrets
+*.env
+.env.local
+secrets.json
+azure-credentials.json
+
+# Virtual environments
+azure-resume-function/.venv/
+backend/.venv/
+.venv/
+
+# Node
+node_modules/
+npm-debug.log
+
+# IDE
+.idea/
+*.iml
