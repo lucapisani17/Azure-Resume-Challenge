@@ -426,7 +426,7 @@ Questo progetto completa l'[Azure Cloud Resume Challenge](https://cloudresumecha
 14. ✅ **CI/CD** - GitHub Actions (Deploy + Test workflows)
 15. ⏳ **Blog Post** - (pianificato)
 
-**Progress: 14/15 completati (93.3%)** 🎉🎉
+**Progress: 14/15 completati**
 
 ## 📈 Metriche del Progetto
 
