@@ -6,8 +6,10 @@ from azure.cosmos import CosmosClient, exceptions
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-@app.route(route="GetVisitorCount", methods=["GET", "POST", "OPTIONS"])
-def GetVisitorCount(req: func.HttpRequest) -> func.HttpResponse:
+def get_visitor_count_logic(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    Business logic per il visitor counter - separata per il testing
+    """
     logging.info('Processing visitor count request')
     
     # Headers CORS
@@ -26,8 +28,17 @@ def GetVisitorCount(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     # Configurazione CosmosDB
-    cosmos_endpoint = os.environ["COSMOS_ENDPOINT"]
-    cosmos_key = os.environ["COSMOS_KEY"]
+    try:
+        cosmos_endpoint = os.environ["COSMOS_ENDPOINT"]
+        cosmos_key = os.environ["COSMOS_KEY"]
+    except KeyError as e:
+        logging.error(f"Missing environment variable: {str(e)}")
+        return func.HttpResponse(
+            body=json.dumps({"error": f"Missing environment variable: {str(e)}"}),
+            status_code=500,
+            headers=headers
+        )
+    
     database_name = "ResumeDB"
     container_name = "VisitorCounter"
     
@@ -75,3 +86,8 @@ def GetVisitorCount(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500,
             headers=headers
         )
+
+@app.route(route="GetVisitorCount", methods=["GET", "POST", "OPTIONS"])
+def GetVisitorCount(req: func.HttpRequest) -> func.HttpResponse:
+    """Azure Function endpoint - chiama la business logic"""
+    return get_visitor_count_logic(req)
