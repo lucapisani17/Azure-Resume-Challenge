@@ -46,15 +46,30 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Install Azure Functions Core Tools
+        run: |
+          curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+          sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+          sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
+          sudo apt-get update
+          sudo apt-get install azure-functions-core-tools-4
+      
+      - name: Install Python dependencies
         run: |
           cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
       
-      - name: Deploy to Azure Functions
-        uses: Azure/functions-action@v1
-        with:
-          app-name: 'resume-rg-counter'
-          package: './backend'
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+      - name: Deploy to Azure Functions using Azure CLI
+        run: |
+          cd backend
+          zip -r ../backend.zip .
+          az functionapp deployment source config-zip \
+            --resource-group resume-rg \
+            --name resume-rg-counter \
+            --src ../backend.zip
