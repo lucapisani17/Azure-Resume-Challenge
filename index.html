@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luca Pisani - Ingegnere Informatico / Computer Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #6366f1;
+            --accent: #a855f7;
+            --dark: #0a0e27;
+            --darker: #050816;
+            --light: #e2e8f0;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --glow: rgba(0, 212, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Archivo', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, #0a0e27 0%, #050816 50%, #0d1b2a 100%);
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 50%);
+            animation: pulse 20s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-5%, -5%) scale(1.05); }
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            display: flex;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: rgba(226, 232, 240, 0.6);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Hide inactive language */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .header-main {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            animation: slideInLeft 0.8s ease-out 0.2s backwards;
+        }
+
+        .bio {
+            font-size: 1.1rem;
+            color: rgba(226, 232, 240, 0.8);
+            max-width: 600px;
+            margin-bottom: 2rem;
+            animation: slideInLeft 0.8s ease-out 0.4s backwards;
+        }
+
+        .contact-info {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: slideInRight 0.8s ease-out 0.3s backwards;
+            min-width: 280px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: rgba(226, 232, 240, 0.9);
+        }
+
+        .contact-item::before {
+            content: '▸';
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Section */
+        section {
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--light);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        h2::before {
+            content: '//';
+            position: absolute;
+            left: -2.5rem;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--light);
+            flex: 1;
+        }
+
+        .card-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+            background: rgba(0, 212, 255, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .card-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .card-description {
+            color: rgba(226, 232, 240, 0.85);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tool-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .tool-tag:hover {
+            background: rgba(99, 102, 241, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-category {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            color: rgba(226, 232, 240, 0.85);
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .skill-category li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(0, 212, 255, 0.2);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--light);
+            margin-bottom: 1rem;
+        }
+
+        .project-description {
+            color: rgba(226, 232, 240, 0.85);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(0, 212, 255, 0.15);
+            margin-top: 4rem;
+        }
+
+        footer p {
+            color: rgba(226, 232, 240, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: var(--primary);
+            color: var(--dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            h2::before {
+                left: 0;
+                top: -1.5rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+            }
+
+            .skills-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lang-toggle {
+                top: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        @media (prefers-reduced-motion: no-preference) {
+            section {
+                opacity: 0;
+                animation: fadeInUp 0.8s ease-out forwards;
+            }
+
+            section:nth-child(2) { animation-delay: 0.1s; }
+            section:nth-child(3) { animation-delay: 0.2s; }
+            section:nth-child(4) { animation-delay: 0.3s; }
+            section:nth-child(5) { animation-delay: 0.4s; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" onclick="switchLanguage('it')">IT</button>
+        <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+    </div>
+
+    <div class="container">
+        <!-- ITALIAN VERSION -->
+        <div id="content-it" class="lang-content active">
+            <header>
+                <div class="header-content">
+                    <div class="header-main">
+                        <h1>Luca Pisani</h1>
+                        <div class="subtitle">&lt;Ingegnere Informatico /&gt;</div>
+                        <p class="bio">
+                            Ingegnere Informatico specializzato in Cloud Computing, Kubernetes e 5G Networks. 
+                            Laureato con lode alla Federico II di Napoli, con esperienza in sviluppo full-stack 
+                            e architetture cloud-native.
+                        </p>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Contatti</h3>
+                        <div class="contact-item">📍 Casoria (NA), Italia</div>
+                        <div class="contact-item">📱 (+39) 340 097 9774</div>
+                        <div class="contact-item">✉️ luca.pisani99@outlook.com</div>
+                        <div class="contact-item">🎂 17/03/1999</div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="istruzione">
+                <h2>Istruzione</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Laurea Magistrale in Ingegneria Informatica</div>
+                        <div class="card-date">10/2025</div>
+                    </div>
+                    <div class="card-subtitle">Università degli Studi di Napoli Federico II</div>
+                    <div class="card-description">
+                        <strong>Votazione:</strong> 110/110 e lode<br>
+                        <strong>Tesi:</strong> Design and Evaluation of Adaptive Resource Scaling Strategies 
+                        for Cloud-Native 5G Core Networks
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">Kubernetes</span>
+                        <span class="tool-tag">Prometheus</span>
+                        <span class="tool-tag">Grafana</span>
+                        <span class="tool-tag">Python</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Cisco DTLab Innovation Zone 2024</div>
+                        <div class="card-date">2024</div>
+                    </div>
+                    <div class="card-description">
+                        Collaborazione al project work per il DTLab Bootcamp 2024. Realizzazione di una web 
+                        application full-stack di bike rent per l'azienda F.lli Schiano.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Laurea Triennale in Ingegneria dell'Informazione</div>
+                    </div>
+                    <div class="card-subtitle">Università degli Studi di Napoli Federico II</div>
+                    <div class="card-description">
+                        <strong>Tesi:</strong> Tipologia di attacchi a Reti Wireless<br>
+                        <strong>Relatore:</strong> Prof. Avallone Stefano
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Diploma Liceo Scientifico</div>
+                        <div class="card-date">100/100</div>
+                    </div>
+                    <div class="card-subtitle">Liceo Statale Gandhi - Scienze Applicate</div>
+                </div>
+            </section>
+
+            <section id="competenze">
+                <h2>Competenze</h2>
+                
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Linguaggi di Programmazione</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>C / C++</li>
+                            <li>C#</li>
+                            <li>Java</li>
+                            <li>HTML / JavaScript</li>
+                            <li>SQL / PHP</li>
+                            <li>Matlab</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Software & Strumenti</h3>
+                        <ul>
+                            <li>Kubernetes & Docker</li>
+                            <li>Prometheus & Grafana</li>
+                            <li>JMeter</li>
+                            <li>GNS3 / NS3</li>
+                            <li>Linux Environment</li>
+                            <li>Microsoft Office (EIPASS)</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Soft Skills</h3>
+                        <ul>
+                            <li>Leadership e Team Management</li>
+                            <li>Problem-solving orientato ai risultati</li>
+                            <li>Gestione efficace dei tempi</li>
+                            <li>Collaborazione e teamwork</li>
+                            <li>Orientamento agli obiettivi</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Lingue</h3>
+                        <ul>
+                            <li>Italiano (Madrelingua)</li>
+                            <li>Inglese (B2)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="esperienze">
+                <h2>Esperienze</h2>
+
+                <div class="card">
+                    <div class="card-title">Web App Development for SCHIANO Group</div>
+                    <div class="card-description">
+                        Realizzazione di una web application di bike rent per SCHIANO Group tramite il 
+                        CISCO DTLab Innovation Zone 2024.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Tutoring per Studenti</div>
+                    <div class="card-description">
+                        Tutoring per studenti liceali e universitari in materie scientifiche, in particolare 
+                        matematica, fisica ed informatica (coding in C, Java, HTML, Python).
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Assemblaggio Computer</div>
+                    <div class="card-description">
+                        Acquisto di componenti ed assemblaggio di macchine dedicate al gaming e 
+                        all'elaborazione digitale (grafica e video editing) per privati.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Video Editor & Graphic Designer</div>
+                    <div class="card-description">
+                        Realizzazione di contenuti digitali (video, anteprime, copertine) per content 
+                        creator su piattaforme YouTube/Twitch.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Website Creation Business</div>
+                    <div class="card-description">
+                        Realizzazione di siti web per privati e piccole attività tramite WordPress.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Progetto "DuckietownHS" - STMicroelectronics</div>
+                    <div class="card-description">
+                        Realizzazione di prototipi di auto a guida autonoma in collaborazione con il MIT di 
+                        Boston, attraverso l'utilizzo del microcontrollore STM32 F401RE.
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">STM32</span>
+                        <span class="tool-tag">Autonomous Driving</span>
+                        <span class="tool-tag">MIT</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Progetto "GEOSCAN" - STMicroelectronics</div>
+                    <div class="card-description">
+                        Realizzazione di un sistema di monitoraggio (drone di terra) dei parametri ambientali 
+                        (ossigeno, anidride carbonica, temperatura, umidità) con microcontrollore STM32 F401RE.
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">STM32</span>
+                        <span class="tool-tag">IoT</span>
+                        <span class="tool-tag">Environmental Monitoring</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="progetti">
+                <h2>Progetti Universitari</h2>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-title">Software Security Attack Chain</div>
+                        <div class="project-description">
+                            Implementazione di una catena di attacco simulata per mostrare come diversi vettori 
+                            di minaccia possano essere combinati per compromettere un sistema bersaglio.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Phishing</span>
+                            <span class="tool-tag">RAT</span>
+                            <span class="tool-tag">Ransomware</span>
+                            <span class="tool-tag">Docker</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">JuicyParty</div>
+                        <div class="project-description">
+                            Realizzazione di un videogioco in Unity3D mediante l'utilizzo del linguaggio C#.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Unity3D</span>
+                            <span class="tool-tag">C#</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">SchianoGO</div>
+                        <div class="project-description">
+                            Web application per l'azienda Schiano con l'obiettivo di fornire un servizio di 
+                            noleggio biciclette efficace.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Quasar</span>
+                            <span class="tool-tag">Node.js</span>
+                            <span class="tool-tag">Express</span>
+                            <span class="tool-tag">JWT</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Calcolo Scientifico</div>
+                        <div class="project-description">
+                            Realizzazione di script in Matlab per segmentazione di immagini con metodi classici, 
+                            machine learning e level set.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Matlab</span>
+                            <span class="tool-tag">ML</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Ottimizzazione Combinatoria</div>
+                        <div class="project-description">
+                            Risoluzione del problema del commesso viaggiatore con droni (FSTSP) NP-HARD mediante 
+                            algoritmi euristici.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Python</span>
+                            <span class="tool-tag">Algorithms</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Ingegneria del Software</div>
+                        <div class="project-description">
+                            Sistema di ordinazioni per ristorazione dalla specifica dei requisiti fino al 
+                            prodotto finale.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Java</span>
+                            <span class="tool-tag">Software Engineering</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <p>© 2025 Luca Pisani - Ingegnere Informatico</p>
+                <a href="https://github.com/lucapisani17" target="_blank" class="github-link">
+                    Vedi su GitHub →
+                </a>
+                <p style="margin-top: 2rem; font-size: 0.8rem;">
+                    Autorizzo il trattamento dei miei dati personali ai sensi dell'art. 13 d. lgs. 30 giugno 2003 n. 196 
+                    e dell'art. 13 GDPR 679/16
+                </p>
+            </footer>
+        </div>
+
+        <!-- ENGLISH VERSION -->
+        <div id="content-en" class="lang-content">
+            <header>
+                <div class="header-content">
+                    <div class="header-main">
+                        <h1>Luca Pisani</h1>
+                        <div class="subtitle">&lt;Computer Engineer /&gt;</div>
+                        <p class="bio">
+                            Computer Engineer specializing in Cloud Computing, Kubernetes, and 5G Networks. 
+                            Graduated with honors from Federico II University of Naples, with experience in 
+                            full-stack development and cloud-native architectures.
+                        </p>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Contact</h3>
+                        <div class="contact-item">📍 Casoria (NA), Italy</div>
+                        <div class="contact-item">📱 (+39) 340 097 9774</div>
+                        <div class="contact-item">✉️ luca.pisani99@outlook.com</div>
+                        <div class="contact-item">🎂 March 17, 1999</div>
+                    </div>
+                </div>
+            </header>
+
+            <section id="education">
+                <h2>Education</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Master's Degree in Computer Engineering</div>
+                        <div class="card-date">10/2025</div>
+                    </div>
+                    <div class="card-subtitle">Federico II University of Naples</div>
+                    <div class="card-description">
+                        <strong>Grade:</strong> 110/110 with honors<br>
+                        <strong>Thesis:</strong> Design and Evaluation of Adaptive Resource Scaling Strategies 
+                        for Cloud-Native 5G Core Networks
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">Kubernetes</span>
+                        <span class="tool-tag">Prometheus</span>
+                        <span class="tool-tag">Grafana</span>
+                        <span class="tool-tag">Python</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Cisco DTLab Innovation Zone 2024</div>
+                        <div class="card-date">2024</div>
+                    </div>
+                    <div class="card-description">
+                        Collaboration on project work for the DTLab Bootcamp 2024. Development of a full-stack 
+                        bike rental web application for F.lli Schiano company.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Bachelor's Degree in Information Engineering</div>
+                    </div>
+                    <div class="card-subtitle">Federico II University of Naples</div>
+                    <div class="card-description">
+                        <strong>Thesis:</strong> Types of Attacks on Wireless Networks<br>
+                        <strong>Supervisor:</strong> Prof. Stefano Avallone
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">High School Diploma in Applied Sciences</div>
+                        <div class="card-date">100/100</div>
+                    </div>
+                    <div class="card-subtitle">Gandhi State High School</div>
+                </div>
+            </section>
+
+            <section id="skills">
+                <h2>Skills</h2>
+                
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>Programming Languages</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>C / C++</li>
+                            <li>C#</li>
+                            <li>Java</li>
+                            <li>HTML / JavaScript</li>
+                            <li>SQL / PHP</li>
+                            <li>Matlab</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Software & Tools</h3>
+                        <ul>
+                            <li>Kubernetes & Docker</li>
+                            <li>Prometheus & Grafana</li>
+                            <li>JMeter</li>
+                            <li>GNS3 / NS3</li>
+                            <li>Linux Environment</li>
+                            <li>Microsoft Office (EIPASS)</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Soft Skills</h3>
+                        <ul>
+                            <li>Leadership & Team Management</li>
+                            <li>Results-oriented Problem-solving</li>
+                            <li>Effective Time Management</li>
+                            <li>Collaboration & Teamwork</li>
+                            <li>Goal-oriented Approach</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>Languages</h3>
+                        <ul>
+                            <li>Italian (Native)</li>
+                            <li>English (B2)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="experience">
+                <h2>Experience</h2>
+
+                <div class="card">
+                    <div class="card-title">Web App Development for SCHIANO Group</div>
+                    <div class="card-description">
+                        Development of a bike rental web application for SCHIANO Group through the 
+                        CISCO DTLab Innovation Zone 2024.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Academic Tutoring</div>
+                    <div class="card-description">
+                        Tutoring for high school and university students in scientific subjects, particularly 
+                        mathematics, physics, and computer science (coding in C, Java, HTML, Python).
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Computer Assembly</div>
+                    <div class="card-description">
+                        Purchase of components and assembly of machines dedicated to gaming and 
+                        digital processing (graphics and video editing) for private clients.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Video Editor & Graphic Designer</div>
+                    <div class="card-description">
+                        Creation of digital content (videos, thumbnails, covers) for content 
+                        creators on YouTube/Twitch platforms.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Website Creation Business</div>
+                    <div class="card-description">
+                        Development of websites for individuals and small businesses using WordPress.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">"DuckietownHS" Project - STMicroelectronics</div>
+                    <div class="card-description">
+                        Development of autonomous car prototypes in collaboration with MIT Boston, 
+                        using the STM32 F401RE microcontroller.
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">STM32</span>
+                        <span class="tool-tag">Autonomous Driving</span>
+                        <span class="tool-tag">MIT</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">"GEOSCAN" Project - STMicroelectronics</div>
+                    <div class="card-description">
+                        Development of an environmental monitoring system (ground drone) for tracking environmental 
+                        parameters (oxygen, carbon dioxide, temperature, humidity) using STM32 F401RE microcontroller.
+                    </div>
+                    <div class="tools">
+                        <span class="tool-tag">STM32</span>
+                        <span class="tool-tag">IoT</span>
+                        <span class="tool-tag">Environmental Monitoring</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects">
+                <h2>University Projects</h2>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-title">Software Security Attack Chain</div>
+                        <div class="project-description">
+                            Implementation of a simulated attack chain to demonstrate how different threat 
+                            vectors can be combined to compromise a target system.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Phishing</span>
+                            <span class="tool-tag">RAT</span>
+                            <span class="tool-tag">Ransomware</span>
+                            <span class="tool-tag">Docker</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">JuicyParty</div>
+                        <div class="project-description">
+                            Development of a video game in Unity3D using C# programming language.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Unity3D</span>
+                            <span class="tool-tag">C#</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">SchianoGO</div>
+                        <div class="project-description">
+                            Web application for Schiano company with the goal of providing an 
+                            effective bike rental service.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Quasar</span>
+                            <span class="tool-tag">Node.js</span>
+                            <span class="tool-tag">Express</span>
+                            <span class="tool-tag">JWT</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Scientific Computing</div>
+                        <div class="project-description">
+                            Development of Matlab scripts for image segmentation using classical methods, 
+                            machine learning, and level set techniques.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Matlab</span>
+                            <span class="tool-tag">ML</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Combinatorial Optimization</div>
+                        <div class="project-description">
+                            Solution to the Traveling Salesman Problem with drones (FSTSP) NP-HARD using 
+                            heuristic algorithms.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Python</span>
+                            <span class="tool-tag">Algorithms</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-title">Software Engineering</div>
+                        <div class="project-description">
+                            Restaurant ordering system from requirements specification to 
+                            final product.
+                        </div>
+                        <div class="tools">
+                            <span class="tool-tag">Java</span>
+                            <span class="tool-tag">Software Engineering</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <p>© 2025 Luca Pisani - Computer Engineer</p>
+                <a href="https://github.com/lucapisani17" target="_blank" class="github-link">
+                    View on GitHub →
+                </a>
+                <p style="margin-top: 2rem; font-size: 0.8rem;">
+                    I authorize the processing of my personal data pursuant to art. 13 of Legislative Decree 196/2003 
+                    and art. 13 GDPR 679/16
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function switchLanguage(lang) {
+            // Hide all language content
+            document.querySelectorAll('.lang-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected language content
+            document.getElementById('content-' + lang).classList.add('active');
+            
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page language attribute
+            document.documentElement.lang = lang;
+        }
+    </script>
+</body>
+</html>
